@@ -55,8 +55,11 @@ try:
     db_password = os.getenv('DB_PASSWORD')
     db_name = os.getenv('DB_NAME')
     db_port = os.getenv('DB_PORT')
+    # print('db_host:', db_host, 'db_user:', db_user, 'db_password:', db_password, 'db_name:', db_name, 'db_port:', db_port)
     # conn = psycopg2.connect(f'sslmode=disable dbname={db_name} user={db_user} password={db_password} host={db_host} port={db_port}')
     # cur = conn.cursor()
+    # cur.execute('SELECT * FROM history')
+    # print(cur.fetchall())
 
     if os.path.exists('cookies.pkl'):
         print('Load cookies')

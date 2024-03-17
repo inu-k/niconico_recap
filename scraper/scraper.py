@@ -8,6 +8,8 @@ import pickle
 from dotenv import load_dotenv
 import psycopg2
 
+from video_info_getter import upsert_video_basic_info_and_video_tag_info
+
 login_url = 'https://account.nicovideo.jp/login'
 
 def login(driver, login_url):
@@ -39,11 +41,14 @@ try:
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
+    options.script_timeout = 120
+    options.page_load_timeout = 120
     # options.add_argument('--disable-gpu')
     driver = webdriver.Remote(
                 command_executor='http://selenium:4444/wd/hub',
                 options=options
                 )
+    print('Driver start')
 
     driver.implicitly_wait(10)
 
@@ -55,11 +60,9 @@ try:
     db_password = os.getenv('DB_PASSWORD')
     db_name = os.getenv('DB_NAME')
     db_port = os.getenv('DB_PORT')
-    # print('db_host:', db_host, 'db_user:', db_user, 'db_password:', db_password, 'db_name:', db_name, 'db_port:', db_port)
-    # conn = psycopg2.connect(f'sslmode=disable dbname={db_name} user={db_user} password={db_password} host={db_host} port={db_port}')
-    # cur = conn.cursor()
-    # cur.execute('SELECT * FROM history')
-    # print(cur.fetchall())
+    print('db_host:', db_host, 'db_user:', db_user, 'db_password:', db_password, 'db_name:', db_name, 'db_port:', db_port)
+    conn = psycopg2.connect(f'sslmode=disable dbname={db_name} user={db_user} password={db_password} host={db_host} port={db_port}')
+    cur = conn.cursor()
 
     if os.path.exists('cookies.pkl'):
         print('Load cookies')
@@ -93,7 +96,7 @@ try:
         history_df = pd.read_csv('history.csv', parse_dates=['watch_date'])
         max_date = history_df['watch_date'].max()
     else:
-        history_df = pd.DataFrame(columns=['url', 'title', 'watch_date'])
+        history_df = pd.DataFrame(columns=['video_id', 'watch_date'])
     print('max_date:', max_date)
 
     media_objects = driver.find_elements(By.CLASS_NAME, 'NC-VideoMediaObject')
@@ -105,20 +108,30 @@ try:
         video_title = media_object.find_element(By.CLASS_NAME, 'NC-VideoMediaObject-title').text
         video_watch_date = media_object.find_element(By.CLASS_NAME, 'VideoWatchHistoryItemAfter-meta').find_element(By.XPATH, 'span').text[:-3]
         video_watch_date = pd.to_datetime(video_watch_date)
-        # print(video_watch_date, max_date, (video_watch_date - max_date).total_seconds())
-        print(video_url, video_title, video_watch_date)
+        
         if (video_watch_date - max_date).total_seconds() <= 0:
             bar.close()
             break
-        new_history.append([video_url, video_title, video_watch_date])
-        # sql = 'INSERT INTO history (video_url, title, watch_date) VALUES (%s, %s, %s)'
-        # cur.execute(sql, (video_url, video_title, video_watch_date))
+        # print(video_watch_date, max_date, (video_watch_date - max_date).total_seconds())
+        video_id = video_url.split('/')[-1]
+        print(video_id, video_title, video_watch_date)
+        new_history.append([video_id, video_watch_date])
+        sql = 'INSERT INTO history (video_id, watch_date) VALUES (%s, %s)'
+        cur.execute(sql, (video_id, video_watch_date))
+        conn.commit()
+        # print(cur.statusmessage)
+        # print(cur.query)
+        upsert_video_basic_info_and_video_tag_info(conn, cur, video_id)
         bar.update(1)
 
     bar.close()
     print('number of new_history:', len(new_history))
-    history_df = pd.concat([pd.DataFrame(new_history, columns=['url', 'title', 'watch_date']), history_df])
-    # df = pd.DataFrame(history_data, columns=['url', 'title', 'watch_date'])
+    # cur.execute('SELECT * FROM history')
+    # print(cur.fetchall())
+    history_df = pd.concat([pd.DataFrame(new_history, columns=['video_id', 'watch_date']), history_df])
+    # df = pd.DataFrame(history_data, columns=['video_id', 'watch_date'])
     history_df.to_csv('history.csv', index=False)
 finally:
     driver.quit()
+    cur.close()
+    conn.close()

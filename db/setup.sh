@@ -1,3 +1,4 @@
-!/bin/bash
-psql -f ./setup.sh -U user -d history
+#!/bin/bash
+ls /tmp
+psql -f /tmp/setup.sql -U user -d db_history
 echo "Database setup complete."

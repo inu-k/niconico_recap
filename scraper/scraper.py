@@ -105,7 +105,7 @@ try:
         driver = login(driver, login_url)
 
     print('Login success')
-    driver.get('https://www.nicovideo.jp/my/history/video')
+    driver = page_load_with_retry(driver, 'https://www.nicovideo.jp/my/history/video')
     print(driver.current_url)
 
     buttons = driver.find_elements(By.CLASS_NAME, 'ShowMoreList-more')

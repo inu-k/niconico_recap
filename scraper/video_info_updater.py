@@ -19,13 +19,10 @@ now_jst = datetime.datetime.now(ZoneInfo('Asia/Tokyo'))
 
 senti_time = pd.to_datetime(f'{(now_jst - datetime.timedelta(days=1)).strftime("%Y-%m-%d")} 05:00:00')
 
-df = pd.read_csv('history.csv')
-df['watch_date'] = pd.to_datetime(df['watch_date'])
-df = df[df['watch_date'] >= senti_time]
+cur.execute('SELECT video_id, watch_date FROM history WHERE watch_date >= %s', (senti_time,))
 
-for row in df.itertuples():
-    print(row.video_id, row.watch_date)
-    sql = 'INSERT INTO history (video_id, watch_date) VALUES (%s, %s)'
-    cur.execute(sql, (row.video_id, row.watch_date))
-    conn.commit()
-    upsert_video_basic_info_and_video_tag_info(conn, cur, row.video_id)
+for row in cur.fetchall():
+    video_id = row[0]
+    watch_date = row[1]
+    print(video_id, watch_date)
+    upsert_video_basic_info_and_video_tag_info(conn, cur, video_id)

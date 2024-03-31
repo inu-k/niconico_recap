@@ -65,9 +65,10 @@ def insert_video_tag_info(conn, cur, video_id):
         for res in response.json()['data']:
             tags = res['tags'].split(' ')
             for tag in tags:
-                sql = 'INSERT INTO video_tag_info (video_id, tag) VALUES (%s, %s)'
+                sql = 'INSERT INTO video_tag_info (video_id, tag) VALUES (%s, %s) ON CONFLICT (video_id, tag) DO NOTHING'
                 cur.execute(sql, (res['contentId'], tag))
                 conn.commit()
+                insert_rows_count = cur.rowcount
     except Exception as e:
         print(f'Failed to get tag info for {video_id}: {e}',)
         return

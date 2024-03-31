@@ -3,9 +3,9 @@ drop table if exists video_basic_info;
 drop table if exists video_tag_info;
 
 create table history (
-  id serial primary key,
   video_id varchar(255) not null,
-  watch_date timestamp not null
+  watch_date timestamp not null.
+  primary key (video_id, watch_date)
 );
 
 create table video_basic_info (
@@ -15,7 +15,7 @@ create table video_basic_info (
 );
 
 create table video_tag_info (
-  id serial primary key,
   video_id varchar(255) not null,
-  tag varchar(255) not null
+  tag varchar(255) not null,
+  primary key (video_id, tag)
 );

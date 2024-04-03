@@ -17,6 +17,8 @@ func main() {
 	r.GET("/ping", pong)
 	r.GET("/history", data.GetAllHistory)
 	r.GET("/history/:date", data.GetHistory)
+	r.GET("/videos/:videoId", data.GetVideo)
+	r.GET("/summary/:date", data.GetSummary)
 
 	r.Run(":8080")
 }

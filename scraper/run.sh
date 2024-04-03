@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "Running scraper"
+source /etc/environment
 cd /app
 echo "cd"
 ls -la 

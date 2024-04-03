@@ -70,8 +70,8 @@ try:
                 )
     print('Driver start')
 
-    driver.implicitly_wait(15)
-    driver.set_page_load_timeout(15)
+    driver.implicitly_wait(30)
+    driver.set_page_load_timeout(30)
 
     # driver.get('https://www.nicovideo.jp/my/history/video')
     # print(driver.current_url)
@@ -88,7 +88,7 @@ try:
     if os.path.exists('cookies.pkl'):
         print('Loading cookies')
         cookies = pickle.load(open('cookies.pkl', 'rb'))
-        driver.get('https://www.nicovideo.jp/video_top')
+        driver = page_load_with_retry(driver, 'https://www.nicovideo.jp/video_top')
         for cookie in cookies:
             driver.add_cookie(cookie)
         print('Cookies loaded')

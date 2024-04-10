@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/cors"
 	"net/http"
 	"niconico_recap_backend/data"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -17,15 +18,22 @@ func pong(c *gin.Context) {
 
 //	@title		niconico_recap_backend API
 //	@version	0.1
-//	@license	inu-k
+//	@license	TBD
 func main() {
 	r := gin.Default()
+
+	// CORS
+	r.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"http://localhost:3030", "http://localhost:3000"},
+		AllowMethods: []string{"GET"},
+		AllowHeaders: []string{"Origin", "Content-Type"},
+	}))
+
 	docs.SwaggerInfo.BasePath = "/"
 	r.GET("/ping", pong)
 	r.GET("/history", data.GetAllHistory)
 	r.GET("/history/:date", data.GetHistory)
 	r.GET("/videos/:videoId", data.GetVideo)
-	r.GET("/summary/daily/:date", data.GetDailySummary)
 	r.GET("/summary", data.GetSummary)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))

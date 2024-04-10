@@ -16,12 +16,25 @@ type detailHistory struct {
 	Title     string `json:"title"`
 }
 
+type ErrorResponse struct {
+	Code int    `json:"code"`
+	Message string `json:"message"`
+}
+
+//	@Summary	指定された日付の視聴履歴を返す
+//	@Produce	json
+//	@Param		date	path		string	true	"yyyy-mm-dd"
+//	@Success	200		{array}		detailHistory
+//	@Failure	400		{object}	ErrorResponse
+//	@Failure	500		{object}	ErrorResponse
+//	@Router		/history/{date} [get]
 func GetHistory(c *gin.Context) {
 	date := c.Param("date")
 	t1, err := time.Parse("2006-01-02", date)
 	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid date format\ndate format: yyyy-mm-dd",
+		c.IndentedJSON(http.StatusBadRequest, ErrorResponse{
+			Code: http.StatusBadRequest,
+			Message: "Invalid date format. date format: yyyy-mm-dd",
 		})
 		return
 	}
@@ -33,8 +46,9 @@ func GetHistory(c *gin.Context) {
 		t1.Format("2006-01-02 15:04:05"), t2.Format("2006-01-02 15:04:05"))
 
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+		c.IndentedJSON(http.StatusInternalServerError, ErrorResponse{
+			Code: http.StatusInternalServerError,
+			Message: err.Error(),
 		})
 		return
 	}
@@ -45,8 +59,9 @@ func GetHistory(c *gin.Context) {
 		var d detailHistory
 		err = rows.Scan(&d.VideoId, &d.WatchDate, &d.Title)
 		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
+			c.IndentedJSON(http.StatusInternalServerError, ErrorResponse{
+				Code: http.StatusInternalServerError,
+				Message: err.Error(),
 			})
 			return
 		}
@@ -57,11 +72,17 @@ func GetHistory(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, history)
 }
 
+//	@Summary	全ての視聴履歴を返す
+//	@Produce	json
+//	@Success	200	{array}		detailHistory
+//	@Failure	500	{object}	ErrorResponse
+//	@Router		/history [get]
 func GetAllHistory(c *gin.Context) {
 	rows, err := Db.Query("select A.video_id, A.watch_date, B.title from history as A inner join video_basic_info as B on A.video_id=B.video_id order by A.watch_date desc")
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+		c.IndentedJSON(http.StatusInternalServerError, ErrorResponse{
+			Code: http.StatusInternalServerError,
+			Message: err.Error(),
 		})
 		return
 	}
@@ -72,8 +93,9 @@ func GetAllHistory(c *gin.Context) {
 		var d detailHistory
 		err = rows.Scan(&d.VideoId, &d.WatchDate, &d.Title)
 		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
+			c.IndentedJSON(http.StatusInternalServerError, ErrorResponse{
+				Code: http.StatusInternalServerError,
+				Message: err.Error(),
 			})
 			return
 		}

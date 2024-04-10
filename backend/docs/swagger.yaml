@@ -1,0 +1,148 @@
+definitions:
+  data.ErrorResponse:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  data.TagNameCount:
+    properties:
+      count:
+        type: integer
+      name:
+        type: string
+    type: object
+  data.VideoInfo:
+    properties:
+      tags:
+        items:
+          type: string
+        type: array
+      thumbnail_url:
+        type: string
+      title:
+        type: string
+      video_id:
+        type: string
+    type: object
+  data.detailHistory:
+    properties:
+      title:
+        type: string
+      video_id:
+        type: string
+      watch_date:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: niconico_recap_backend API
+  version: "0.1"
+paths:
+  /history:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/data.detailHistory'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/data.ErrorResponse'
+      summary: 全ての視聴履歴を返す
+  /history/{date}:
+    get:
+      parameters:
+      - description: yyyy-mm-dd
+        in: path
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/data.detailHistory'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/data.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/data.ErrorResponse'
+      summary: 指定された日付の視聴履歴を返す
+  /summary:
+    get:
+      description: |-
+        指定された期間内に視聴された動画のタグのサマリーを返す
+        タグは視聴された回数の降順で返される
+        dateが指定された場合はその日の5時から29時までのデータを返す
+        startDateとendDateが指定された場合はstartDateの5時からからendDateの29時までのデータを返す
+        startDateが指定されない場合は1900-01-01, endDateが指定されない場合は現在として扱う
+      parameters:
+      - description: yyyy-mm-dd
+        in: query
+        name: date
+        type: string
+      - description: yyyy-mm-dd
+        in: query
+        name: startDate
+        type: string
+      - description: yyyy-mm-dd
+        in: query
+        name: endDate
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/data.TagNameCount'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/data.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/data.ErrorResponse'
+      summary: 指定された期間内に視聴された動画のタグのサマリーを返す
+  /videos/{videoId}:
+    get:
+      parameters:
+      - description: videoId
+        in: path
+        name: videoId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/data.VideoInfo'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/data.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/data.ErrorResponse'
+      summary: 指定されたvideoIdの動画情報を返す
+swagger: "2.0"

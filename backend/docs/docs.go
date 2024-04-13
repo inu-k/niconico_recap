@@ -216,6 +216,9 @@ const docTemplate = `{
         "data.detailHistory": {
             "type": "object",
             "properties": {
+                "thumbnail_url": {
+                    "type": "string"
+                },
                 "title": {
                     "type": "string"
                 },

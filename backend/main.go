@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/gin-contrib/cors"
 	"net/http"
 	"niconico_recap_backend/data"
-	ginSwagger "github.com/swaggo/gin-swagger"
-	swaggerfiles "github.com/swaggo/files"
 	docs "niconico_recap_backend/docs"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func pong(c *gin.Context) {
@@ -16,9 +17,9 @@ func pong(c *gin.Context) {
 	})
 }
 
-//	@title		niconico_recap_backend API
-//	@version	0.1
-//	@license	TBD
+// @title		niconico_recap_backend API
+// @version	0.1
+// @license	TBD
 func main() {
 	r := gin.Default()
 

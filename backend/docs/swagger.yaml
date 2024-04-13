@@ -28,6 +28,8 @@ definitions:
     type: object
   data.detailHistory:
     properties:
+      thumbnail_url:
+        type: string
       title:
         type: string
       video_id:

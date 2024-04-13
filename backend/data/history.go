@@ -11,13 +11,14 @@ import (
 )
 
 type detailHistory struct {
-	VideoId   string `json:"video_id"`
-	WatchDate string `json:"watch_date"`
-	Title     string `json:"title"`
+	VideoId      string `json:"video_id"`
+	WatchDate    string `json:"watch_date"`
+	Title        string `json:"title"`
+	ThumbnailUrl string `json:"thumbnail_url"`
 }
 
 type ErrorResponse struct {
-	Code int    `json:"code"`
+	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
 
@@ -33,7 +34,7 @@ func GetHistory(c *gin.Context) {
 	t1, err := time.Parse("2006-01-02", date)
 	if err != nil {
 		c.IndentedJSON(http.StatusBadRequest, ErrorResponse{
-			Code: http.StatusBadRequest,
+			Code:    http.StatusBadRequest,
 			Message: "Invalid date format. date format: yyyy-mm-dd",
 		})
 		return
@@ -42,12 +43,12 @@ func GetHistory(c *gin.Context) {
 	t1 = t1.Add(5 * time.Hour)
 	t2 := t1.Add(24 * time.Hour)
 
-	rows, err := Db.Query("select A.video_id, A.watch_date, B.title from history as A inner join video_basic_info as B on A.video_id=B.video_id where A.watch_date>=$1 and A.watch_date<=$2 order by A.watch_date desc",
+	rows, err := Db.Query("select A.video_id, A.watch_date, B.title, B.thumbnail_url from history as A inner join video_basic_info as B on A.video_id=B.video_id where A.watch_date>=$1 and A.watch_date<=$2 order by A.watch_date desc",
 		t1.Format("2006-01-02 15:04:05"), t2.Format("2006-01-02 15:04:05"))
 
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, ErrorResponse{
-			Code: http.StatusInternalServerError,
+			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
 		})
 		return
@@ -57,10 +58,10 @@ func GetHistory(c *gin.Context) {
 	history := make([]detailHistory, 0)
 	for rows.Next() {
 		var d detailHistory
-		err = rows.Scan(&d.VideoId, &d.WatchDate, &d.Title)
+		err = rows.Scan(&d.VideoId, &d.WatchDate, &d.Title, &d.ThumbnailUrl)
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, ErrorResponse{
-				Code: http.StatusInternalServerError,
+				Code:    http.StatusInternalServerError,
 				Message: err.Error(),
 			})
 			return
@@ -78,10 +79,10 @@ func GetHistory(c *gin.Context) {
 //	@Failure	500	{object}	ErrorResponse
 //	@Router		/history [get]
 func GetAllHistory(c *gin.Context) {
-	rows, err := Db.Query("select A.video_id, A.watch_date, B.title from history as A inner join video_basic_info as B on A.video_id=B.video_id order by A.watch_date desc")
+	rows, err := Db.Query("select A.video_id, A.watch_date, B.title, B.thumbnail_url from history as A inner join video_basic_info as B on A.video_id=B.video_id order by A.watch_date desc")
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, ErrorResponse{
-			Code: http.StatusInternalServerError,
+			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
 		})
 		return
@@ -91,10 +92,10 @@ func GetAllHistory(c *gin.Context) {
 	history := make([]detailHistory, 0)
 	for rows.Next() {
 		var d detailHistory
-		err = rows.Scan(&d.VideoId, &d.WatchDate, &d.Title)
+		err = rows.Scan(&d.VideoId, &d.WatchDate, &d.Title, &d.ThumbnailUrl)
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, ErrorResponse{
-				Code: http.StatusInternalServerError,
+				Code:    http.StatusInternalServerError,
 				Message: err.Error(),
 			})
 			return

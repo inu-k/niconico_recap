@@ -4,6 +4,7 @@ export interface VideoHistory {
     video_id: string;
     watch_date: string;
     title: string;
+    thumbnail_url: string;
 }
 
 export interface VideoHistoryProps {
@@ -15,9 +16,12 @@ export function HistoryList({ history }: VideoHistoryProps) {
         <p>
             {history.map((history, index) => {
                 const url = `https://www.nicovideo.jp/watch/${history.video_id}`;
+                if (index === 0) {
+                    console.log('thumbnail:', history.thumbnail_url)
+                }
                 return (
                     <div>
-                        <img className="history-thumbnail" src="https://nicovideo.cdn.nimg.jp/thumbnails/43639677/43639677.83203883.M" alt="masuo" />
+                        <img className="history-thumbnail" src={history.thumbnail_url} alt="thumbnail" />
                         <a href={url} target="_blank" rel="noreferrer">{history.title}</a> {formatDate(history.watch_date)}
                     </div>);
             })}

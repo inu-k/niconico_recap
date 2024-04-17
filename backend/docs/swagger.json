@@ -18,14 +18,14 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/data.detailHistory"
+                                "$ref": "#/definitions/data.DetailHistory"
                             }
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     }
                 }
@@ -52,20 +52,20 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/data.detailHistory"
+                                "$ref": "#/definitions/data.DetailHistory"
                             }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     }
                 }
@@ -111,13 +111,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     }
                 }
@@ -148,13 +148,13 @@
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     }
                 }
@@ -162,13 +162,19 @@
         }
     },
     "definitions": {
-        "data.ErrorResponse": {
+        "data.DetailHistory": {
             "type": "object",
             "properties": {
-                "code": {
-                    "type": "integer"
+                "thumbnail_url": {
+                    "type": "string"
                 },
-                "message": {
+                "title": {
+                    "type": "string"
+                },
+                "video_id": {
+                    "type": "string"
+                },
+                "watch_date": {
                     "type": "string"
                 }
             }
@@ -179,7 +185,7 @@
                 "count": {
                     "type": "integer"
                 },
-                "name": {
+                "tag_name": {
                     "type": "string"
                 }
             }
@@ -204,19 +210,13 @@
                 }
             }
         },
-        "data.detailHistory": {
+        "presentation.ErrorResponse": {
             "type": "object",
             "properties": {
-                "thumbnail_url": {
-                    "type": "string"
+                "code": {
+                    "type": "integer"
                 },
-                "title": {
-                    "type": "string"
-                },
-                "video_id": {
-                    "type": "string"
-                },
-                "watch_date": {
+                "message": {
                     "type": "string"
                 }
             }

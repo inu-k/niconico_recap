@@ -2,8 +2,8 @@ package main
 
 import (
 	"net/http"
-	"niconico_recap_backend/data"
 	docs "niconico_recap_backend/docs"
+	"niconico_recap_backend/presentation"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -32,10 +32,9 @@ func main() {
 
 	docs.SwaggerInfo.BasePath = "/"
 	r.GET("/ping", pong)
-	r.GET("/history", data.GetAllHistory)
-	r.GET("/history/:date", data.GetHistory)
-	r.GET("/videos/:videoId", data.GetVideo)
-	r.GET("/summary", data.GetSummary)
+	r.GET("/history", presentation.GetHistory)
+	r.GET("/videos/:videoId", presentation.GetVideoInfo)
+	r.GET("/summary", presentation.GetSummary)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 

@@ -1,16 +1,20 @@
 definitions:
-  data.ErrorResponse:
+  data.DetailHistory:
     properties:
-      code:
-        type: integer
-      message:
+      thumbnail_url:
+        type: string
+      title:
+        type: string
+      video_id:
+        type: string
+      watch_date:
         type: string
     type: object
   data.TagNameCount:
     properties:
       count:
         type: integer
-      name:
+      tag_name:
         type: string
     type: object
   data.VideoInfo:
@@ -26,15 +30,11 @@ definitions:
       video_id:
         type: string
     type: object
-  data.detailHistory:
+  presentation.ErrorResponse:
     properties:
-      thumbnail_url:
-        type: string
-      title:
-        type: string
-      video_id:
-        type: string
-      watch_date:
+      code:
+        type: integer
+      message:
         type: string
     type: object
 info:
@@ -51,12 +51,12 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/data.detailHistory'
+              $ref: '#/definitions/data.DetailHistory'
             type: array
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/data.ErrorResponse'
+            $ref: '#/definitions/presentation.ErrorResponse'
       summary: 全ての視聴履歴を返す
   /history/{date}:
     get:
@@ -73,16 +73,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/data.detailHistory'
+              $ref: '#/definitions/data.DetailHistory'
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/data.ErrorResponse'
+            $ref: '#/definitions/presentation.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/data.ErrorResponse'
+            $ref: '#/definitions/presentation.ErrorResponse'
       summary: 指定された日付の視聴履歴を返す
   /summary:
     get:
@@ -117,11 +117,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/data.ErrorResponse'
+            $ref: '#/definitions/presentation.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/data.ErrorResponse'
+            $ref: '#/definitions/presentation.ErrorResponse'
       summary: 指定された期間内に視聴された動画のタグのサマリーを返す
   /videos/{videoId}:
     get:
@@ -141,10 +141,10 @@ paths:
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/data.ErrorResponse'
+            $ref: '#/definitions/presentation.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/data.ErrorResponse'
+            $ref: '#/definitions/presentation.ErrorResponse'
       summary: 指定されたvideoIdの動画情報を返す
 swagger: "2.0"

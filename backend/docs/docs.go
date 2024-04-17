@@ -27,14 +27,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/data.detailHistory"
+                                "$ref": "#/definitions/data.DetailHistory"
                             }
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     }
                 }
@@ -61,20 +61,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/data.detailHistory"
+                                "$ref": "#/definitions/data.DetailHistory"
                             }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     }
                 }
@@ -120,13 +120,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     }
                 }
@@ -157,13 +157,13 @@ const docTemplate = `{
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/data.ErrorResponse"
+                            "$ref": "#/definitions/presentation.ErrorResponse"
                         }
                     }
                 }
@@ -171,13 +171,19 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "data.ErrorResponse": {
+        "data.DetailHistory": {
             "type": "object",
             "properties": {
-                "code": {
-                    "type": "integer"
+                "thumbnail_url": {
+                    "type": "string"
                 },
-                "message": {
+                "title": {
+                    "type": "string"
+                },
+                "video_id": {
+                    "type": "string"
+                },
+                "watch_date": {
                     "type": "string"
                 }
             }
@@ -188,7 +194,7 @@ const docTemplate = `{
                 "count": {
                     "type": "integer"
                 },
-                "name": {
+                "tag_name": {
                     "type": "string"
                 }
             }
@@ -213,19 +219,13 @@ const docTemplate = `{
                 }
             }
         },
-        "data.detailHistory": {
+        "presentation.ErrorResponse": {
             "type": "object",
             "properties": {
-                "thumbnail_url": {
-                    "type": "string"
+                "code": {
+                    "type": "integer"
                 },
-                "title": {
-                    "type": "string"
-                },
-                "video_id": {
-                    "type": "string"
-                },
-                "watch_date": {
+                "message": {
                     "type": "string"
                 }
             }

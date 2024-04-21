@@ -2,6 +2,7 @@ import './App.css';
 import { Routes, Route, Link } from 'react-router-dom';
 import HistoryPage from './pages/HistoryPage';
 import VideoInfoPage from './pages/VideoInfoPage';
+import SummaryPage from './pages/SummayPage';
 
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
 
       <Routes>
         <Route path='/history' element={<HistoryPage />} />
-        <Route path='/summary' element={<div>Summary</div>} />
+        <Route path='/summary' element={<SummaryPage />} />
         <Route path='/videos/:videoId' element={<VideoInfoPage />} />
       </Routes>
     </div>

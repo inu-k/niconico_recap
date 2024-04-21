@@ -33,7 +33,7 @@ export default function HistoryPage() {
     };
 
     const handleHistoryShowOnDuration = () => {
-        var params: string[] = [];
+        let params: string[] = [];
         if (startDate) {
             params.push(`startDate=${startDate}`);
         }

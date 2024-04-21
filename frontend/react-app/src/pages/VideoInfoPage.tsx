@@ -28,14 +28,17 @@ export default function VideoInfoPage() {
             });
     }, []);
 
+    if ('code' in videoInfo) {
+        if (videoInfo.code === 404) {
+            return <div>Video not found</div>;
+        }
+        else {
+            return <div>Something went wrong</div>;
+        }
+    }
     if (!videoInfo.video_id) {
         return <div>Loading...</div>;
     }
-    else if (videoInfo.video_id === 'sm00000000') {
-        return <div>Video not found</div>;
-    }
-
-    console.log('videoInfo:', videoInfo);
 
     return (
         <div>

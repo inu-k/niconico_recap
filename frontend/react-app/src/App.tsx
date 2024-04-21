@@ -9,15 +9,17 @@ function App() {
     <div className="App">
       <header className="App-header">
         <p>
-          hi
+          niconico-recap
         </p>
 
-        <Link to="/history">History</Link>
+        <Link className='header-link' to="/history">History</Link>
+        <Link className='header-link' to="/summary">Summary</Link>
 
       </header>
 
       <Routes>
         <Route path='/history' element={<HistoryPage />} />
+        <Route path='/summary' element={<div>Summary</div>} />
         <Route path='/videos/:videoId' element={<VideoInfoPage />} />
       </Routes>
     </div>

@@ -4,7 +4,9 @@ import { Summary, SummaryProps } from '../components/Summary';
 
 // show summary of videos
 export default function SummaryPage() {
-    const [summaryProps, setSummaryProps] = useState<SummaryProps>({ summary: [] });
+    const [summaryProps, setSummaryProps] = useState<SummaryProps>({ summary: [], watch_count: 0 });
+    const [watchCount, setWatchCount] = useState(0);
+    const [summary, setSummary] = useState<Summary[]>([]); // [ { tag_name: 'tag', count: 1 }, ... ]
     const [date, setDate] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -12,11 +14,20 @@ export default function SummaryPage() {
     const handleSummaryShowOnDate = () => {
         fetchData(`http://localhost:8088/summary?date=${date}`)
             .then(data => {
-                setSummaryProps({ summary: data });
+                setSummary(data);
             })
             .catch(error => {
                 console.error(error);
-                setSummaryProps({ summary: [] });
+                setSummary([]);
+            });
+
+        fetchData(`http://localhost:8088/history?date=${date}`)
+            .then(data => {
+                setWatchCount(data.length);
+            })
+            .catch(error => {
+                console.error(error);
+                setWatchCount(0);
             });
     };
 
@@ -31,11 +42,20 @@ export default function SummaryPage() {
 
         fetchData(`http://localhost:8088/summary?${params.join('&')}`)
             .then(data => {
-                setSummaryProps({ summary: data });
+                setSummary(data);
             })
             .catch(error => {
                 console.error(error);
-                setSummaryProps({ summary: [] });
+                setSummary([]);
+            });
+
+        fetchData(`http://localhost:8088/history?${params.join('&')}`)
+            .then(data => {
+                setWatchCount(data.length);
+            })
+            .catch(error => {
+                console.error(error);
+                setWatchCount(0);
             });
     };
 
@@ -52,7 +72,7 @@ export default function SummaryPage() {
                 <input type='date' value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                 <button onClick={handleSummaryShowOnDuration}>Show</button>
             </p>
-            <Summary summary={summaryProps.summary} />
+            <Summary summary={summary} watch_count={watchCount} />
         </div>
     );
 }

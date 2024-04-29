@@ -27,7 +27,7 @@ def login(driver, login_url):
     driver.find_element(By.ID, 'login__submit').click()
 
     print(driver.current_url)
-    if driver.current_url != 'https://www.nicovideo.jp/video_top':
+    if driver.current_url != 'https://www.nicovideo.jp':
         print('Login may be failed.')
         exit(1)
 
@@ -70,8 +70,8 @@ try:
                 )
     print('Driver start')
 
-    driver.implicitly_wait(30)
-    driver.set_page_load_timeout(30)
+    driver.implicitly_wait(60)
+    driver.set_page_load_timeout(60)
 
     # driver.get('https://www.nicovideo.jp/my/history/video')
     # print(driver.current_url)
@@ -88,13 +88,11 @@ try:
     if os.path.exists('cookies.pkl'):
         print('Loading cookies')
         cookies = pickle.load(open('cookies.pkl', 'rb'))
-        driver = page_load_with_retry(driver, 'https://www.nicovideo.jp/video_top')
+        driver = page_load_with_retry(driver, 'https://www.nicovideo.jp/ranking')
         for cookie in cookies:
             driver.add_cookie(cookie)
         print('Cookies loaded')
-        # driver.get('https://www.nicovideo.jp/video_top')
-        driver = page_load_with_retry(driver, 'https://www.nicovideo.jp/video_top')
-        # driver.get('https://www.nicovideo.jp/my/history/video')
+        # driver = page_load_with_retry(driver, 'https://www.nicovideo.jp/video_top')
         driver = page_load_with_retry(driver, 'https://www.nicovideo.jp/my/history/video')
         if driver.current_url != 'https://www.nicovideo.jp/my/history/video':
             print('Login may be failed.')

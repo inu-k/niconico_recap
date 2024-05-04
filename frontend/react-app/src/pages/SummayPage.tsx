@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { fetchData } from '../functions/utils';
 import { Summary, SummaryProps } from '../components/Summary';
+import styles from './SummaryPage.module.css';
 
 // show summary of videos
 export default function SummaryPage() {
@@ -60,17 +61,17 @@ export default function SummaryPage() {
     };
 
     return (
-        <div>
+        <div className={styles.container}>
             <h1>Summary</h1>
             <p> サマリーを表示する特定の日付を選択：
-                <input type='date' value={date} onChange={(e) => setDate(e.target.value)} />
-                <button onClick={handleSummaryShowOnDate}>Show</button>
+                <input className={styles.box} type='date' value={date} onChange={(e) => setDate(e.target.value)} />
+                <button className={styles.button} onClick={handleSummaryShowOnDate}>検索</button>
             </p>
             <p> サマリーを表示する期間を選択：
-                <input type='date' value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                <input className={styles.box} type='date' value={startDate} onChange={(e) => setStartDate(e.target.value)} />
                 〜
-                <input type='date' value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-                <button onClick={handleSummaryShowOnDuration}>Show</button>
+                <input className={styles.box} type='date' value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+                <button className={styles.button} onClick={handleSummaryShowOnDuration}>検索</button>
             </p>
             <Summary summary={summary} watch_count={watchCount} />
         </div>

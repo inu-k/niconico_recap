@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { HistoryList, VideoHistoryProps } from '../components/HistoryList';
 import { fetchData } from '../functions/utils';
+import styles from './HistoryPage.module.css';
 
 // show history of watch_videos
 export default function HistoryPage() {
@@ -56,17 +57,17 @@ export default function HistoryPage() {
     };
 
     return (
-        <div>
-            <h1>History</h1>
+        <div className={styles.container}>
+            <h1>視聴履歴</h1>
             <p> 履歴を表示する特定の日付を選択：
-                <input type='date' value={date} onChange={(e) => setDate(e.target.value)} />
-                <button onClick={handleHistoryShowOnDate}>Show</button>
+                <input className={styles.box} type='date' value={date} onChange={(e) => setDate(e.target.value)} />
+                <button className={styles.button} onClick={handleHistoryShowOnDate}>検索</button>
             </p>
             <p> 履歴を表示する期間を選択：
-                <input type='date' value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                <input className={styles.box} type='date' value={startDate} onChange={(e) => setStartDate(e.target.value)} />
                 〜
-                <input type='date' value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-                <button onClick={handleHistoryShowOnDuration}>Show</button>
+                <input className={styles.box} type='date' value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+                <button className={styles.button} onClick={handleHistoryShowOnDuration}>検索</button>
             </p>
             <HistoryList history={historyProps.history} />
         </div>

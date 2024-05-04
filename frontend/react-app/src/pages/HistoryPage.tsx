@@ -10,8 +10,12 @@ export default function HistoryPage() {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
+    // 1週間前
+    const today = new Date();
+    const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+
     useEffect(() => {
-        fetchData('http://localhost:8088/history')
+        fetchData(`http://localhost:8088/history?startDate=${lastWeek.toISOString().split('T')[0]}`)
             .then(data => {
                 setHisotryProps({ history: data });
             })

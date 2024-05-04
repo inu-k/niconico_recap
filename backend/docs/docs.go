@@ -15,33 +15,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/history": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "全ての視聴履歴を返す",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/data.DetailHistory"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/presentation.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/history/{date}": {
             "get": {
+                "description": "dateが指定された場合はその日の5時から29時までのデータを返す\nstartDateとendDateが指定された場合はstartDateの5時からからendDateの29時までのデータを返す\nstartDateが指定されない場合は1900-01-01, endDateが指定されない場合は現在として扱う",
                 "produces": [
                     "application/json"
                 ],
@@ -51,8 +27,19 @@ const docTemplate = `{
                         "type": "string",
                         "description": "yyyy-mm-dd",
                         "name": "date",
-                        "in": "path",
-                        "required": true
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "yyyy-mm-dd",
+                        "name": "startDate",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "yyyy-mm-dd",
+                        "name": "endDate",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -114,6 +101,52 @@ const docTemplate = `{
                             "type": "array",
                             "items": {
                                 "$ref": "#/definitions/data.TagNameCount"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/presentation.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/presentation.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/videos": {
+            "get": {
+                "description": "tagが指定された場合はそのタグが含まれる動画を返す\ntitleが指定された場合はそのタイトルが含まれる動画を返す\ntagとtitleが指定された場合はtagの条件が優先される",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "タグやタイトルで動画を検索して返す",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tag",
+                        "name": "tag",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "title",
+                        "name": "title",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/data.VideoInfoWithoutTags"
                             }
                         }
                     },
@@ -208,6 +241,20 @@ const docTemplate = `{
                         "type": "string"
                     }
                 },
+                "thumbnail_url": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "video_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "data.VideoInfoWithoutTags": {
+            "type": "object",
+            "properties": {
                 "thumbnail_url": {
                     "type": "string"
                 },

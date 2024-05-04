@@ -13,8 +13,6 @@ export interface VideoInfo {
 export default function VideoInfoPage() {
     const [videoInfo, setVideoInfo] = useState<VideoInfo>({ video_id: '', title: '', tags: [], thumbnail_url: '' });
     let { videoId } = useParams();
-    console.log('videoId:', videoId);
-
 
     useEffect(() => {
         fetch(`http://localhost:8088/videos/${videoId}`)
@@ -41,16 +39,16 @@ export default function VideoInfoPage() {
     }
 
     return (
-        <div>
-            <h1>Video Information</h1>
+        <div className='video-info-page-container'>
+            <h1>動画情報</h1>
             <h2>{videoInfo.title}</h2>
             <p>
                 <img className="video-thumbnail" src={videoInfo.thumbnail_url} alt="thumbnail" />
                 <a href={`https://www.nicovideo.jp/watch/${videoInfo.video_id}`} target="_blank" rel="noreferrer">{videoInfo.title}</a>
             </p>
-            <p>Tags:</p>
+            <p>タグ:</p>
             <ul>
-                {videoInfo.tags.map(tag => <li key={tag}>{tag}</li>)}
+                {videoInfo.tags.map(tag => <li key={tag}><a href={`http://localhost:3030/search?tag=${tag}`}>{tag}</a></li>)}
             </ul>
         </div>
     );

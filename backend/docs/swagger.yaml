@@ -30,6 +30,15 @@ definitions:
       video_id:
         type: string
     type: object
+  data.VideoInfoWithoutTags:
+    properties:
+      thumbnail_url:
+        type: string
+      title:
+        type: string
+      video_id:
+        type: string
+    type: object
   presentation.ErrorResponse:
     properties:
       code:
@@ -42,29 +51,24 @@ info:
   title: niconico_recap_backend API
   version: "0.1"
 paths:
-  /history:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/data.DetailHistory'
-            type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/presentation.ErrorResponse'
-      summary: 全ての視聴履歴を返す
   /history/{date}:
     get:
+      description: |-
+        dateが指定された場合はその日の5時から29時までのデータを返す
+        startDateとendDateが指定された場合はstartDateの5時からからendDateの29時までのデータを返す
+        startDateが指定されない場合は1900-01-01, endDateが指定されない場合は現在として扱う
       parameters:
       - description: yyyy-mm-dd
-        in: path
+        in: query
         name: date
-        required: true
+        type: string
+      - description: yyyy-mm-dd
+        in: query
+        name: startDate
+        type: string
+      - description: yyyy-mm-dd
+        in: query
+        name: endDate
         type: string
       produces:
       - application/json
@@ -123,6 +127,39 @@ paths:
           schema:
             $ref: '#/definitions/presentation.ErrorResponse'
       summary: 指定された期間内に視聴された動画のタグのサマリーを返す
+  /videos:
+    get:
+      description: |-
+        tagが指定された場合はそのタグが含まれる動画を返す
+        titleが指定された場合はそのタイトルが含まれる動画を返す
+        tagとtitleが指定された場合はtagの条件が優先される
+      parameters:
+      - description: tag
+        in: query
+        name: tag
+        type: string
+      - description: title
+        in: query
+        name: title
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/data.VideoInfoWithoutTags'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presentation.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presentation.ErrorResponse'
+      summary: タグやタイトルで動画を検索して返す
   /videos/{videoId}:
     get:
       parameters:

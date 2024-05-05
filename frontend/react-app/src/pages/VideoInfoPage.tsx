@@ -1,6 +1,7 @@
 import { title } from 'process';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import styles from './VideoInfoPage.module.css';
 
 export interface VideoInfo {
     video_id: string;
@@ -39,7 +40,7 @@ export default function VideoInfoPage() {
     }
 
     return (
-        <div className='video-info-page-container'>
+        <div className={styles.container}>
             <h1>動画情報</h1>
             <h2>{videoInfo.title}</h2>
             <p>

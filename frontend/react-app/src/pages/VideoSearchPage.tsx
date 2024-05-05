@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { SearchResultList, SearchResultProps } from "../components/SearchResultList";
 import { fetchData } from "../functions/utils";
 import { useLocation } from "react-router-dom";
+import styles from './VideoSearchPage.module.css'
 
 // search videos page
 export default function VideoSearchPage() {
@@ -56,11 +57,11 @@ export default function VideoSearchPage() {
     }
 
     return (
-        <div className="video-search-page-container">
+        <div className={styles.container}>
             <h1>視聴したビデオを検索</h1>
-            <input className="video-search-page-box" ref={inputRef} value={searchText} onChange={(e) => { setSearchText(e.target.value); }} type='text' placeholder='タイトルかタグを入力' />
-            <button className="video-search-page-button" onClick={() => handleVideoSearchByTitle(searchText)}>タイトル検索(部分一致)</button>
-            <button className="video-search-page-button" onClick={() => handleVideoSearchByTag(searchText)}>タグ検索(完全一致)</button>
+            <input className={styles.box} ref={inputRef} value={searchText} onChange={(e) => { setSearchText(e.target.value); }} type='text' placeholder='タイトルかタグを入力' />
+            <button className={styles.button} onClick={() => handleVideoSearchByTitle(searchText)}>タイトル検索(部分一致)</button>
+            <button className={styles.button} onClick={() => handleVideoSearchByTag(searchText)}>タグ検索(完全一致)</button>
 
             <div>
                 {searchedText && (<h2>{searchedText} の検索結果: {searchResult.results.length}件</h2>)}

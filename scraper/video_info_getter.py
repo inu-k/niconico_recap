@@ -1,26 +1,6 @@
 import requests
 
 ENDPOINT_URL = 'https://snapshot.search.nicovideo.jp/api/v2/snapshot/video/contents/search'
-# payload = {
-#     'q': '',
-#     'targets': 'tags',
-#     'filters[contentId][0]': 'sm42690205',
-#     '_sort': '-viewCounter',
-#     'fields': 'contentId,title,tags,viewCounter,startTime,thumbnailUrl'
-# }
-
-# response = requests.get(ENDPOINT_URL, params=payload)
-# response.raise_for_status()
-# res = response.json()
-# for res in response.json()['data']:
-#     print(res['contentId'])
-#     print(res['title'])
-#     print(res['tags'].split(' '))
-#     print(res['viewCounter'])
-#     print(res['startTime'])
-#     print(res['thumbnailUrl'])
-#     print('-----------------')
-# print(response.json())
 
 def upsert_video_basic_info(conn, cur, video_id):
     payload = {
